@@ -8,14 +8,16 @@ from metaphone import doublemetaphone
 class NorvigSpellChecker:
     text_url = 'https://norvig.com/big.txt'
 
-    def __init__(self, mt_phone=False):
+    def __init__(self, mt_phone=False, verbose=False):
         self.mt_phone = mt_phone
         self.text = get(self.text_url).text
         self.words = self.tokens(self.text)
         self.counts = Counter(self.words)
         self.mp_dict = self.create_mp_dict() if self.mt_phone else None
-        print(f'NorvigSpellChecker init: size of text: {len(self.text)}, num of words: {len(self.words)}')
-        print(f'3 most common words: {self.counts.most_common(3)}')
+        self.verbose = verbose
+        if self.verbose:
+            print(f'NorvigSpellChecker init: size of text: {len(self.text)}, num of words: {len(self.words)}')
+            print(f'3 most common words: {self.counts.most_common(3)}')
 
     def create_mp_dict(self):
         mp_dict = dict()
