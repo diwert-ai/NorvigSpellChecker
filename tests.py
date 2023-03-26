@@ -4,7 +4,7 @@
 from checker import NorvigSpellChecker
 
 
-def spell_test(tests, verbose=False):
+def spell_test(tests, checker, verbose=False):
     import time
     start = time.time()
     good, unknown = 0, 0
@@ -28,21 +28,14 @@ def test_set(lines):
             for wrong in wrongs.split()]
 
 
-def test_corpus(filename):
+def test_corpus(filename, checker):
     print("Testing " + filename)
-    spell_test(test_set(open('datasets/' + filename)))
+    spell_test(test_set(open('datasets/' + filename)), checker)
 
 
 if __name__ == '__main__':
-    checker = NorvigSpellChecker()
-    test_corpus('spell-testset1.txt')  # Development set
-    test_corpus('spell-testset2.txt')  # Final test set
-    # Supplementary sets
-    test_corpus('wikipedia.txt')
-    test_corpus('aspell.txt')
-    checker = NorvigSpellChecker(mt_phone=True)
-    test_corpus('spell-testset1.txt')  # Development set
-    test_corpus('spell-testset2.txt')  # Final test set
-    # Supplementary sets
-    test_corpus('wikipedia.txt')
-    test_corpus('aspell.txt')
+    datasets = ['spell-testset1.txt', 'spell-testset2.txt', 'wikipedia.txt', 'aspell.txt', 'birkbeck.txt']
+    checkers = [NorvigSpellChecker(), NorvigSpellChecker(mt_phone=True)]
+    for test_checker in checkers:
+        for ds_filename in datasets:
+            test_corpus(ds_filename, test_checker)
